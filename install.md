@@ -10,11 +10,11 @@ Legion requires a Linux system and the following dependencies:
   
   ```sh
   sudo apt install build-essential  # For Debian-based systems
-
+```sh
 ### Make, which can be installed with the following command:
-
+```
 > sudo apt install make  # For Debian-based systems
-
+```sh 
 # Installation
 
 ## Clone the Repository
@@ -23,13 +23,13 @@ Legion requires a Linux system and the following dependencies:
 ```sh 
 git clone https://github.com/YOURUSERACCOUNT/legion.git
 cd legion
-```sh 
+```
 ## Compile the Program
 
-### After cloning the repository, compile the program by running:
-
+### After cloning the repository, compile the program by ```sh
+```sh
 > make
-
+```
 ## Run the Scanner
 
 ### Once compiled, Legion can be executed with the following command:

@@ -4,14 +4,12 @@
 - Linux (Ubuntu, Debian, Arch, Fedora)
 - GCC (`sudo apt install build-essential` on Debian-based systems)
 - `make` (`sudo apt install make`)
-
+---
 ## Installation
 Clone the repository:
 ```sh
 git clone https://github.com/YOURUSERACCOUNT/legion.git
-
-
-     cd legion
+cd legion
 
 
 ## Compile the program:

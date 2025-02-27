@@ -1,5 +1,3 @@
-Here is a minimal INSTALL.md file:
-
 # Install Legion
 
 ## Requirements
@@ -36,4 +34,3 @@ sudo cp legion /usr/local/bin/
 ```sh
 sudo rm /usr/local/bin/legion
 
-### (Contact for any needed modifications)

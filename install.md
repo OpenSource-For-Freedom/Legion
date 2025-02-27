@@ -8,9 +8,12 @@
 ## Installation
 Clone the repository:
 ```sh
-git clone https://github.com/yourusername/legion.git
-cd legion
-```
+git clone https://github.com/YOURUSERACCOUNT/legion.git
+
+
+     cd legion
+
+
 ## Compile the program:
 
 ```sh

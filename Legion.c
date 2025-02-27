@@ -269,7 +269,10 @@ int main(int argc, char *argv[]) {
         printf("Usage: %s <signatures_file> <directory_to_monitor>\n", argv[0]);
         return 1;
     }
-
+////int main(int argc, char *argv[]) {
+ //   print_ascii_banner();
+    // rest of Legion’s code...
+}
     check_dependencies();
     update_signatures();
     load_signatures(argv[1]);

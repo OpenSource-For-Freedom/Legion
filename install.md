@@ -1,4 +1,3 @@
-Here’s the properly formatted Markdown file, ensuring all sections are correctly structured, and shell commands are clearly marked:
 
 # Install Legion
 

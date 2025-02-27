@@ -10,8 +10,7 @@ Legion requires a Linux system and the following dependencies:
   
   ```sh
   sudo apt install build-essential  # For Debian-based systems
-```sh
-### Make, which can be installed with the following command:
+```
 ```
 > sudo apt install make  # For Debian-based systems
 ```sh 

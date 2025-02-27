@@ -37,4 +37,4 @@ sudo cp legion /usr/local/bin/
 sudo rm /usr/local/bin/legion
 make clean
 
-Let me know if you want any modifications.
+(Contact for any needed modifications)

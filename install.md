@@ -18,7 +18,7 @@ sudo apt install make  # For Debian-based systems
 ## Clone the Repository
 
 ### To download
-```sh 
+```
 git clone https://github.com/YOURUSER-ACCOUNT/legion.git
 cd legion
 
@@ -32,7 +32,7 @@ make
 
 ### Once compiled, Legion can be executed with the following command:
 
- ```sh
+```
 ./legion /path/to/scan
 
 ## Install Legion Globally
@@ -44,7 +44,7 @@ sudo cp legion /usr/local/bin/
 
 ### Once installed globally, Legion can be run from any directory using:
 
- ```sh
+ ```
 legion /path
 
 ### Uninstall Legion
@@ -56,6 +56,6 @@ sudo rm /usr/local/bin/legion
 
 ### To clean up compiled files from the repository, run:
 
- ```sh
+ ```
 make clean
 

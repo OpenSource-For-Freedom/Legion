@@ -13,11 +13,9 @@ cd legion
 
 
 ## Compile the program:
-
-```sh
+```
 make
 
-```
 ## Run the scanner:
 
 ```sh

@@ -1,35 +1,58 @@
+
 # Install Legion
 
 ## Requirements
-- Linux (Ubuntu, Debian, Arch, Fedora)
-- GCC (`sudo apt install build-essential` on Debian-based systems)
-- `make` (`sudo apt install make`)
----
-## Installation
-Clone the repository:
-```sh
+
+Legion requires a Linux system and the following dependencies:
+
+- A supported Linux distribution, such as Ubuntu, Debian, Arch, or Fedora.
+- GCC, which can be installed with the following command:
+  
+  ```sh
+  sudo apt install build-essential  # For Debian-based systems
+
+### Make, which can be installed with the following command:
+
+> sudo apt install make  # For Debian-based systems
+
+# Installation
+
+## Clone the Repository
+
+### To download Legion, use the following command:
+```sh 
 git clone https://github.com/YOURUSERACCOUNT/legion.git
 cd legion
 
+## Compile the Program
 
-## Compile the program:
-```
-make
+### After cloning the repository, compile the program by running:
 
-## Run the scanner:
+> make
 
-```sh
-./legion /path/to/scan
+## Run the Scanner
 
-```
-## Install globally:
+### Once compiled, Legion can be executed with the following command:
 
-```sh
-sudo cp legion /usr/local/bin/
+> ./legion /path/to/scan
 
-```
-## To remove Legion:
+## Install Legion Globally
 
-```sh
-sudo rm /usr/local/bin/legion
+### To install Legion system-wide, copy the binary to /usr/local/bin/ using:
+
+> sudo cp legion /usr/local/bin/
+
+### Once installed globally, Legion can be run from any directory using:
+
+> legion /path
+
+### Uninstall Legion
+
+## To remove Legion from your system, delete the installed binary with:
+
+> sudo rm /usr/local/bin/legion
+
+### To clean up compiled files from the repository, run:
+
+> make clean
 

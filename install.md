@@ -23,7 +23,7 @@ Legion requires a Linux system and the following dependencies:
 ```sh 
 git clone https://github.com/YOURUSERACCOUNT/legion.git
 cd legion
-
+```sh 
 ## Compile the Program
 
 ### After cloning the repository, compile the program by running:

@@ -1,3 +1,7 @@
+
+
+
+
 // adding whitelist and trying to increase false positive prevention while scanning and loads
 // this file has the gui and deeper scan/ log capability for deploying action vs just scanning
 #include <stdio.h>
@@ -12,6 +16,28 @@
 #include <sys/inotify.h>
 #include <libyara.h>
 #include <time.h>
+
+
+void print_ascii_banner() {
+    printf("\n"
+           "  @@@       @@@@@@@@   @@@@@@@@  @@@   @@@@@@   @@@  @@@  \n"
+           "  @@@       @@@@@@@@  @@@@@@@@@  @@@  @@@@@@@@  @@@@ @@@  \n"
+           "  @@!       @@!       !@@        @@!  @@!  @@@  @@!@!@@@  \n"
+           "  !@!       !@!       !@!        !@!  !@!  @!@  !@!!@!@!  \n"
+           "  @!!       @!!!:!    !@! @!@!@  !!@  @!@  !@!  @!@ !!@!  \n"
+           "  !!!       !!!!!:    !!! !!@!!  !!!  !@!  !!!  !@!  !!!  \n"
+           "  !!:       !!:       :!!   !!:  !!:  !!:  !!!  !!:  !!!  \n"
+           "   :!:      :!:       :!:   !::  :!:  :!:  !:!  :!:  !:!  \n"
+           "  :: ::::   :: ::::   ::: ::::   ::  ::::: ::   ::   ::  \n"
+           " : :: : :  : :: ::    :: :: :   :     : :  :   ::    :   \n"
+           "\n"
+           "---------------------------------------------------------\n"
+           "   Legion - Linux Threat Scanner | Version 1.0 \n"
+           "---------------------------------------------------------\n"
+           "\n");
+}
+
+
 
 #define MAX_SIGNATURES 100
 #define EVENT_SIZE (sizeof(struct inotify_event) + 256)

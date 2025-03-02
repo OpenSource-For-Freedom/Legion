@@ -36,7 +36,7 @@ void print_ascii_banner() {
            " : :: : :  : :: ::    :: :: :   :     : :  :   ::    :   \n"
            RESET "\n"
            GREEN "---------------------------------------------------------\n"
-           "   Legion - Linux Threat Scanner | Version 1.0 \n"
+           "  Legion - Linux Threat Signature Scanner | Version 1.0 \n"
            "---------------------------------------------------------\n"
            RESET "\n");
 }

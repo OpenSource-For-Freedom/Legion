@@ -30,6 +30,7 @@ readme_content = """\
 
 - First test was stable but failed on **6** lines.
 - Looking to keep it **high level and heuristic** with updated resources.
+- Next step is to build the signature and whitelist requirment to an api, instead of a local txt. 
 - Wanting to tie in a **SIEM tool**, unknown which outside of **Wazuh** or **Splunk**.
 
 ## Ideas
@@ -39,5 +40,7 @@ readme_content = """\
 
 ### **Agentless for VM and container-based deployments**
 - Kubernetes audit logs or **Falco rules**, Legion could detect unusual processes or syscalls.
+- API signature integration
+- MLOp's .... yes pleaze. 
 """
 

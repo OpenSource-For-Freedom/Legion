@@ -20,7 +20,7 @@ Linux distro Malware scanner and heuristics model
 ## Why
 - I have dreamed of building my own malware scan tool.
 - I also wanted to learn "C" in a way to teach and allow facts to hold security at its highest. 
-- I vow to help the UNIX world with our heart, mind and passions. 
+- I vow to help the UNIX world with my heart, mind and passions. 
 
 ## Where we are
 - first test was stable but failed on (6) lines.

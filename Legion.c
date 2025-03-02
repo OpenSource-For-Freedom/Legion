@@ -1,6 +1,8 @@
 // adding whitelist and trying to increase false positive prevention while scanning and loads
 // this file has the GUI and deeper scan/log capability for deploying action vs just scanning
 // needs api call and update heuristics model instead of reading files locally 
+// DONT FORGET TO PLACE A TXT FOR SIG's and WHITLIST for it to read from. 
+// Until we can get the api to read and the file write to action, this is just a scanning tool at the moment. 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

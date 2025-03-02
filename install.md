@@ -34,7 +34,7 @@ Legion requires a **Linux system** and the following dependencies:
 To install **GCC**, run:
 
 ```sh
-sudo apt install build-essential  # For Debian-based systems
+sudo apt install build-essential  # For Debian only
 ```
 
 ## Install Make
@@ -42,7 +42,7 @@ sudo apt install build-essential  # For Debian-based systems
 To install **Make**, run:
 
 ```sh
-sudo apt install make  # For Debian-based systems
+sudo apt install make  # For Debian only 
 ```
 
 ## Installation

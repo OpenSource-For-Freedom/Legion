@@ -63,6 +63,9 @@ Post **cloning the repository**, srarr the file by running:
 ```sh
 make
 ```
+## Place file path for txt
+
+Be sure to uodate the main file with your file path for signature based detection, and whitelisted reseources. 
 
 ## Run the Scanner
 

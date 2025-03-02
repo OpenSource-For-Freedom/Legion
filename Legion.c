@@ -17,7 +17,7 @@
 #include <libyara.h>
 #include <time.h>
 
-
+// colors for banner 
 #define RED "\033[1;31m"
 #define GREEN "\033[1;32m"
 #define RESET "\033[0m"
@@ -110,6 +110,7 @@ int is_whitelisted(const char *filename) {
 }
 
 // loads malware stuff for scanning with error handling 
+// needs other sha and md5 readable algorithms in place
 void load_signatures(const char *filename) {
     FILE *file = fopen(filename, "r");
     if (!file) {
@@ -131,7 +132,7 @@ void compute_sha256(const char *filename, char *output) {
     unsigned char hash[SHA256_DIGEST_LENGTH];
     SHA256_CTX sha256;
     SHA256_Init(&sha256);
-
+// error if file is not accessible in place 
     FILE *file = fopen(filename, "rb");
     if (!file) {
         perror("Error opening file for hashing");

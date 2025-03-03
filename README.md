@@ -13,7 +13,7 @@
                                                         
 ```
 
-# Legion
+# ================ Legion ==================
 
 **Linux distro Malware scanner and heuristics model**  
 ---
@@ -27,6 +27,8 @@
 ## Where we are
 
 - First test was stable but failed on **6** lines.
+- Developed an active `whitelist.txt` file for a baseline heuristic model. 
+- Developed a <placeholder> `signatures.txt` file for a framework for building known threats.
 - Looking to keep it **high level and heuristic** with updated resources.
 - Next step is to build the signature and whitelist requirment to an api, instead of a local txt. 
 - Wanting to tie in a **SIEM tool**, unknown which outside of **Wazuh** or **Splunk**.

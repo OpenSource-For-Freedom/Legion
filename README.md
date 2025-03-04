@@ -46,5 +46,5 @@
 - Kubernetes audit logs or **Falco rules**, Legion could detect unusual processes or syscalls.
 - API signature integration
 - MLOp's .... yes pleaze. 
-"""
+
 

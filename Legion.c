@@ -1,8 +1,8 @@
 // adding whitelist and trying to increase false positive prevention while scanning and loads
 // this file has the GUI and deeper scan/log capability for deploying action vs just scanning
 // needs api call and update heuristics model instead of reading files locally 
-// DONT FORGET TO PLACE A TXT FOR SIG's and WHITLIST for it to read from. 
 // Until we can get the api to read and the file write to action, this is just a scanning tool at the moment. 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -14,6 +14,8 @@
 #include <openssl/sha.h>
 #include <sys/inotify.h>
 #include <libyara.h>
+#include <dlfcn.h>
+#include <curl/curl.h>
 #include <time.h>
 #include <syslog.h>
 
@@ -27,13 +29,17 @@
 #define LOG_FILE "/var/log/legion_scan.log"
 #define WHITELIST_FILE "/etc/legion/whitelist.txt"
 #define YARA_RULES_FILE "/etc/legion/rules.yar"
+#define API_ENDPOINT "http://localhost:5000/logs"
 
 char *signatures[MAX_SIGNATURES];
 int signature_count = 0;
 char *whitelist[MAX_SIGNATURES];
 int whitelist_count = 0;
 
-// Prints ASCII Banner
+// RUST 
+typedef char* (*rust_scan_fn)(const char *);
+
+// NASTY
 void print_ascii_banner() {
     printf(RED "\n"
            "  @@@       @@@@@@@@   @@@@@@@@  @@@   @@@@@@   @@@  @@@  \n"
@@ -48,19 +54,23 @@ void print_ascii_banner() {
            " : :: : :  : :: ::    :: :: :   :     : :  :   ::    :   \n"
            RESET "\n"
            GREEN "---------------------------------------------------------\n"
-           "  Legion - Linux Threat Signature Scanner | Version 1.2 \n"
+           "  Legion - Linux Threat Signature Scanner | Version 1.3 \n"
            "---------------------------------------------------------\n"
            RESET "\n");
 }
 
-// Logs
-void log_detection(const char *message) {
-    openlog("LegionScanner", LOG_PID | LOG_CONS, LOG_USER);
-    syslog(LOG_WARNING, "%s", message);
-    closelog();
+// ALERTING
+void send_alert(const char *message) {
+    CURL *curl = curl_easy_init();
+    if (curl) {
+        curl_easy_setopt(curl, CURLOPT_URL, API_ENDPOINT);
+        curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message);
+        curl_easy_perform(curl);
+        curl_easy_cleanup(curl);
+    }
 }
 
-// Loads Whitelist
+// LOAD WHTLST
 void load_whitelist() {
     FILE *file = fopen(WHITELIST_FILE, "r");
     if (!file) {
@@ -76,7 +86,7 @@ void load_whitelist() {
     fclose(file);
 }
 
-// Checks Whitelist
+// WHTLST
 int is_whitelisted(const char *filename) {
     for (int i = 0; i < whitelist_count; i++) {
         if (strcmp(filename, whitelist[i]) == 0) {
@@ -86,85 +96,37 @@ int is_whitelisted(const char *filename) {
     return 0;
 }
 
-// Runs (es32 & Suricata) NEW add over clamv local scan 
-int run_external_scanners(const char *filename) {
-    char command[512];
-    int score = 0;
-
-    snprintf(command, sizeof(command), "es32 --scan %s --json > /dev/null 2>&1", filename);
-    if (system(command) == 0) {
-        score++;
-        printf("[es32] Malware detected in %s\n", filename);
-        log_detection("[es32 DETECTION] Malware found.");
+// RUST - scan
+void run_rust_scanner(const char *filename) {
+    void *handle = dlopen("./scanner.so", RTLD_LAZY);
+    if (!handle) {
+        fprintf(stderr, "Error loading scanner.so\n");
+        return;
     }
 
-    snprintf(command, sizeof(command), "suricata -r %s > /dev/null 2>&1", filename);
-    if (system(command) == 0) {
-        score++;
-        printf("[Suricata] Threat detected in %s\n", filename);
-        log_detection("[Suricata DETECTION] Threat found.");
+    rust_scan_fn rust_scan = (rust_scan_fn) dlsym(handle, "compute_sha256");
+    if (!rust_scan) {
+        fprintf(stderr, "Error loading Rust function\n");
+        dlclose(handle);
+        return;
     }
 
-    return score;
+    char *result = rust_scan(filename);
+    printf("[RUST SCANNER] %s -> Hash: %s\n", filename, result);
+    send_alert(result);
+
+    dlclose(handle);
 }
 
-// YARA Scan
-void scan_with_yara(const char *filename, int *score) {
-    if (is_whitelisted(filename)) {
-        printf("[INFO] Skipping whitelisted file: %s\n", filename);
-        return;
-    }
+// YARA (calls yara_integrations.c)
+extern void scan_with_yara(const char *filename, int *score);
 
-    YR_RULES *rules;
-    YR_COMPILER *compiler;
-
-    if (yr_initialize() != ERROR_SUCCESS) {
-        perror("Failed to initialize YARA");
-        return;
-    }
-
-    if (yr_compiler_create(&compiler) != ERROR_SUCCESS) {
-        perror("Failed to create YARA compiler");
-        yr_finalize();
-        return;
-    }
-
-    FILE *rules_file = fopen(YARA_RULES_FILE, "r");
-    if (!rules_file) {
-        perror("Error opening YARA rules file");
-        yr_compiler_destroy(compiler);
-        yr_finalize();
-        return;
-    }
-
-    if (yr_compiler_add_file(compiler, rules_file, NULL, "main") != ERROR_SUCCESS) {
-        perror("Error compiling YARA rules");
-        fclose(rules_file);
-        yr_compiler_destroy(compiler);
-        yr_finalize();
-        return;
-    }
-
-    fclose(rules_file);
-    if (yr_compiler_get_rules(compiler, &rules) != ERROR_SUCCESS) {
-        perror("Error getting YARA rules");
-        yr_compiler_destroy(compiler);
-        yr_finalize();
-        return;
-    }
-
-    if (yr_rules_scan_file(rules, filename, 0, NULL, NULL, 0) == ERROR_SUCCESS) {
-        printf("[YARA] Potential malware found in %s\n", filename);
-        log_detection("[YARA DETECTION] Potential malware found.");
-        (*score)++;
-    }
-
-    yr_rules_destroy(rules);
-    yr_compiler_destroy(compiler);
-    yr_finalize();
+// MONITOR (calls ebpf_monitor.bpf.c)
+void start_ebpf_monitor() {
+    system("./ebpf_monitor");
 }
 
-// Monitors 
+// MONITOR
 void *monitor_directory(void *arg) {
     char *dir = (char *)arg;
     int inotify_fd = inotify_init();
@@ -187,7 +149,7 @@ void *monitor_directory(void *arg) {
             perror("Error reading inotify events");
             continue;
         }
-
+// NOTIFY 
         for (int i = 0; i < length;) {
             struct inotify_event *event = (struct inotify_event *)&buffer[i];
             if (event->len && (event->mask & (IN_CREATE | IN_MODIFY))) {
@@ -201,11 +163,13 @@ void *monitor_directory(void *arg) {
 
                 printf("[REAL-TIME] Detected change in %s, scanning...\n", full_path);
                 int score = 0;
+
+                run_rust_scanner(full_path);
                 scan_with_yara(full_path, &score);
-                score += run_external_scanners(full_path);
 
                 if (score > 1) {
                     printf(RED "[ALERT] Suspicious file detected: %s\n" RESET, full_path);
+                    send_alert("[ALERT] Suspicious file detected.");
                 }
             }
             i += EVENT_SIZE + event->len;
@@ -217,7 +181,7 @@ void *monitor_directory(void *arg) {
     return NULL;
 }
 
-// Main Function
+// MAIN
 int main(int argc, char *argv[]) {
     if (argc < 3) {
         printf("Usage: %s <signatures_file> <directory_to_monitor>\n", argv[0]);
@@ -227,12 +191,20 @@ int main(int argc, char *argv[]) {
     print_ascii_banner();
     load_whitelist();
 
-    pthread_t monitor_thread;
+    pthread_t monitor_thread, ebpf_thread;
+
     if (pthread_create(&monitor_thread, NULL, monitor_directory, argv[2]) != 0) {
         perror("Error creating monitoring thread");
         return 1;
     }
 
+    if (pthread_create(&ebpf_thread, NULL, (void *)start_ebpf_monitor, NULL) != 0) {
+        perror("Error starting eBPF monitor");
+        return 1;
+    }
+
     pthread_join(monitor_thread, NULL);
+    pthread_join(ebpf_thread, NULL);
+
     return 0;
 }

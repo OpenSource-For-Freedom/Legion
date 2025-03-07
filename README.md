@@ -13,7 +13,7 @@
                                                         
           The Linux Malware Sentinel 
 
-```
+
 
 # ================ 𝕃𝔼𝔾𝕀𝕆ℕ ==================#
 #                                            #
@@ -23,7 +23,7 @@
 #             - Marcus Aurelius              #
 #                                            #
 # ========= STAGING AND PLANNING ===========#
-
+```
 **Linux distro Malware scanner and heuristics model**  
 ---
 

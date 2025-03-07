@@ -15,9 +15,14 @@
 
 ```
 
-
-
-# ================ Legion ==================
+# ================ 𝕃𝔼𝔾𝕀𝕆ℕ ==================#
+#                                            #
+#    "Dwell on the beauty of life. Watch     #
+#         the stars, and see yourself        #
+#             running with them".            #
+#             - Marcus Aurelius              #
+#                                            #
+# ========= STAGING AND PLANNING ===========#
 
 **Linux distro Malware scanner and heuristics model**  
 ---
